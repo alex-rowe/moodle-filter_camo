@@ -1,6 +1,11 @@
 # moodle-filter_camo
 Moodle Filter to convert images to route through a camo proxy server
 
+## Camo Server
+Make sure you have a working setup of Camo before enabling this, otherwise your images will not show.
+For more information, see this repo.
+[https://github.com/atmos/camo](https://github.com/atmos/camo)
+
 ## Install
 Add this folder to the /filter directory in your Moodle web root.
 
