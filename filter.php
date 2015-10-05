@@ -27,43 +27,42 @@
 defined('MOODLE_INTERNAL') || die();
 
 class filter_camo extends moodle_text_filter {
-    
     public function filter($text, array $options = array()) {
         global $CFG;
-        
+
         if (!is_string($text) or empty($text)) {
-            // non string data can not be filtered anyway
+            // Non string data can not be filtered anyway.
             return $text;
         }
-        
+
         if (stripos($text, '<img') === false) {
             // Performance shortcut - if no <img> tag, nothing can match.
             return $text;
         }
-        
+
         $host = get_config('filter_camo', 'host');
         $key  = get_config('filter_camo', 'key');
         $site = $CFG->wwwroot;
-        
+
         $newtext = $text;
 
         $pattern = "#<img.*?src=[\"'](http://[^\"]+)[\"'].*?/?>#i";
-        
+
         if (preg_match_all($pattern, $newtext, $matches)) {
             foreach ($matches[1] as $url) {
-                // Don't rewrite requests for this site
+                // Don't rewrite requests for this site.
                 if (stripos($url, $site) === false) {
                     $digest = hash_hmac('sha1', $url, $key);
                     $newtext = str_replace($url, $host . '/' . $digest . '/' . bin2hex($url), $newtext);
                 }
             }
         }
-        
+
         if (empty($newtext) or $newtext === $text) {
-            // error or not filtered
+            // Error or not filtered.
             return $text;
-        } 
-    
+        }
+
         return $newtext;
     }
 
