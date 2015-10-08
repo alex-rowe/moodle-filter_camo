@@ -52,6 +52,7 @@ class filter_camo extends moodle_text_filter {
             foreach ($matches[1] as $url) {
                 // Don't rewrite requests for this site.
                 if (stripos($url, $site) === false) {
+                    $url = htmlspecialchars_decode($url);
                     $digest = hash_hmac('sha1', $url, $key);
                     $newtext = str_replace($url, $host . '/' . $digest . '/' . bin2hex($url), $newtext);
                 }
