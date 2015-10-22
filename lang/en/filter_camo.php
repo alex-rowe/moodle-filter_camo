@@ -27,6 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['filtername'] = 'Camo';
 $string['host'] = 'Camo Host';
-$string['host_desc'] = 'What is the URL of your Camo Server';
+$string['host_desc'] = 'What is the URL of your Camo Server without a trailing slash (e.g. https://camo.example.com)';
 $string['key'] = 'Camo Key';
-$string['key_desc'] = '64 Character key without backslashes (pwgen -sy 64)';
+$string['key_desc'] = '64 Character key without backslashes (pwgen -sy 64) (e.g. etooxeeNeuchopee8teecieghueghainohtheebaukahseegacheimunaefiquae)';

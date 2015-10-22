@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -30,6 +29,13 @@ class filter_camo extends moodle_text_filter {
     public function filter($text, array $options = array()) {
         global $CFG;
 
+        // If not configured, then return unfiltered text.
+        $host = get_config('filter_camo', 'host');
+        $key  = get_config('filter_camo', 'key');
+        if (empty($host) || empty($key)) {
+            return $text;
+        }
+
         if (!is_string($text) or empty($text)) {
             // Non string data can not be filtered anyway.
             return $text;
@@ -40,10 +46,6 @@ class filter_camo extends moodle_text_filter {
             return $text;
         }
 
-        $host = get_config('filter_camo', 'host');
-        $key  = get_config('filter_camo', 'key');
-        $site = $CFG->wwwroot;
-
         $newtext = $text;
 
         $pattern = "#<img.*?src=[\"'](http://[^\"]+)[\"'].*?/?>#i";
@@ -51,7 +53,7 @@ class filter_camo extends moodle_text_filter {
         if (preg_match_all($pattern, $newtext, $matches)) {
             foreach ($matches[1] as $url) {
                 // Don't rewrite requests for this site.
-                if (stripos($url, $site) === false) {
+                if (stripos($url, $CFG->wwwroot) === false) {
                     $url = htmlspecialchars_decode($url);
                     $digest = hash_hmac('sha1', $url, $key);
                     $newtext = str_replace($url, $host . '/' . $digest . '/' . bin2hex($url), $newtext);
